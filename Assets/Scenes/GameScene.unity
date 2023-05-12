@@ -346,7 +346,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 30
+  field of view: 40
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -371,14 +371,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.40955177, y: -0.10166689, z: 0.03364998, w: 0.9059796}
-  m_LocalPosition: {x: 1, y: 10, z: -10}
+  m_LocalRotation: {x: 0.1663657, y: -0.73994213, z: 0.19826692, w: 0.62088513}
+  m_LocalPosition: {x: 20, y: 15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1837922475}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 48.498, y: -13.675, z: -1.929}
+  m_LocalEulerAnglesHint: {x: 30, y: -100, z: 0}
 --- !u!1 &1496198670
 GameObject:
   m_ObjectHideFlags: 0
@@ -410,7 +410,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grassPrefab: {fileID: 9204354760360268162, guid: 7ed01085bb039d7488ba7558ad4be868, type: 3}
   roadPrefab: {fileID: 53123697275581750, guid: 0cb34d454b5a7274b9c6f56f75478e45, type: 3}
-  bloke: {fileID: 919132149155446097, guid: 2ff7effc280690f41bef7ddb70716b26, type: 3}
+  bloke: {fileID: 1473691946996880961, guid: 045fa336a72f0f04c9a0d9dc8ceb0609, type: 3}
+  placa: {fileID: 6806313842397973411, guid: c32731b1a80555048a6d8daf1b8699ee, type: 3}
   minSpeed: 2
   maxSpeed: 4
 --- !u!4 &1496198672
@@ -600,6 +601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f54bd35c02058c49b651316893d69d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  placaPintada: {fileID: 6693922230095508086, guid: 3aab9766f22ef5b4fa64202c8b89ae29, type: 3}
 --- !u!54 &1851944724
 Rigidbody:
   m_ObjectHideFlags: 0

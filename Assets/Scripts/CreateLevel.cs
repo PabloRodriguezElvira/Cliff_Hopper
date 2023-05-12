@@ -12,6 +12,7 @@ public class CreateLevel : MonoBehaviour
 
     public GameObject grassPrefab, roadPrefab;
     public GameObject bloke;
+    public GameObject placa;
     public float minSpeed, maxSpeed;
 
     //Start is called before the first frame update
@@ -54,6 +55,8 @@ public class CreateLevel : MonoBehaviour
     {
         GameObject obj;
         float sizeBlock = 4.0f;
+        float sizePlaca = 3.0f;
+        int blocks = 4;
 
         //Tiles en línea recta:
         for (int i = 0; i < 4; ++i)
@@ -62,11 +65,32 @@ public class CreateLevel : MonoBehaviour
             obj.transform.Translate(0.0f, -4.0f, i * sizeBlock);
             obj.transform.parent = transform;
         }
-        //Rotar 90º
+        //Giradas
         for (int i = 0; i < 4; ++i)
         {
             obj = (GameObject)Instantiate(bloke);
-            obj.transform.Translate(i*sizeBlock, -4.0f, 4*sizeBlock);
+            obj.transform.Translate(i*sizeBlock, -4.0f, 4.0f*sizeBlock);
+            obj.transform.parent = transform;
+            
+            //Placa:
+            if (i == 0)
+            {
+                obj = (GameObject)Instantiate(placa);
+                obj.transform.Translate(i*sizeBlock, 0.0f, 4.0f*sizePlaca);
+                obj.transform.parent = transform;
+            }
+        }
+        //Tiles en línea recta:
+        for (int i = 4; i < 8; ++i)
+        {
+            if (i == 4)
+            {
+                obj = (GameObject)Instantiate(placa);
+                obj.transform.Translate(blocks*sizeBlock, 0.0f, i*sizePlaca);
+                obj.transform.parent = transform;
+            }
+            obj = (GameObject)Instantiate(bloke);
+            obj.transform.Translate(blocks*sizeBlock, -4.0f, i * sizeBlock);
             obj.transform.parent = transform;
         }
     }
