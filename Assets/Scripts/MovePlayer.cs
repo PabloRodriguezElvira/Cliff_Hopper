@@ -12,6 +12,7 @@ public class MovePlayer : MonoBehaviour
     public AudioClip jumpSound;
 
     bool bMoving;
+    bool canRotate;
     Vector3 initPos;
     float angle;
     MoveDirection currentDirection, moveDirection;
@@ -19,43 +20,40 @@ public class MovePlayer : MonoBehaviour
     void Start()
     {
         bMoving = false;
+        canRotate = false;
         currentDirection = MoveDirection.FORWARD;
+        moveDirection = MoveDirection.FORWARD;
+    }
+
+    void OnTriggerEnter(Collider objeto)
+    {
+        if (objeto.gameObject.CompareTag("PlacaPintada"))
+        {
+            canRotate = true; 
+        } 
     }
 
     void Update()
     {
-        if (!bMoving && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)))
+        //Moverse palante.
+        if (!bMoving)
         {
             bMoving = true;
             initPos = transform.position;
             angle = 0;
-            moveDirection = MoveDirection.FORWARD;
-            if (currentDirection == MoveDirection.LEFT)
-                transform.Rotate(0.0f, 90.0f, 0.0f);
-            else if(currentDirection == MoveDirection.RIGHT)
-                transform.Rotate(0.0f, -90.0f, 0.0f);
-            currentDirection = moveDirection;
+
             AudioSource.PlayClipAtPoint(jumpSound, transform.position);
         }
-        else if(!bMoving && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)))
+        else if (canRotate && (Input.GetKey(KeyCode.Space)))
         {
             bMoving = true;
+            canRotate = false;
             initPos = transform.position;
             angle = 0;
-            moveDirection = MoveDirection.LEFT;
-            if (currentDirection == MoveDirection.FORWARD)
-                transform.Rotate(0.0f, -90.0f, 0.0f);
-            else if (currentDirection == MoveDirection.RIGHT)
-                transform.Rotate(0.0f, -180.0f, 0.0f);
-            currentDirection = moveDirection;
-            AudioSource.PlayClipAtPoint(jumpSound, transform.position, 2.0f);
-        }
-        else if (!bMoving && (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)))
-        {
-            bMoving = true;
-            initPos = transform.position;
-            angle = 0;
+
+            //Cambiamos dirección.
             moveDirection = MoveDirection.RIGHT;
+            //Rotamos player.
             if (currentDirection == MoveDirection.LEFT)
                 transform.Rotate(0.0f, 180.0f, 0.0f);
             else if (currentDirection == MoveDirection.FORWARD)
@@ -63,21 +61,37 @@ public class MovePlayer : MonoBehaviour
             currentDirection = moveDirection;
             AudioSource.PlayClipAtPoint(jumpSound, transform.position);
         }
+        //else if (canRotate && (Input.GetKey(KeyCode.Space)))
+        //{
+        //    bMoving = true;
+        //    canRotate = false;
+        //    initPos = transform.position;
+        //    angle = 0;
+        //    moveDirection = MoveDirection.LEFT;
+        //    if (currentDirection == MoveDirection.FORWARD)
+        //        transform.Rotate(0.0f, -90.0f, 0.0f);
+        //    else if (currentDirection == MoveDirection.RIGHT)
+        //        transform.Rotate(0.0f, -180.0f, 0.0f);
+        //    currentDirection = moveDirection;
+        //    AudioSource.PlayClipAtPoint(jumpSound, transform.position, 2.0f);
+        //}
         if (bMoving)
         {
-            switch (moveDirection)
-            {
-                case MoveDirection.LEFT:
-                    transform.position = initPos + new Vector3(-angle / 180.0f, 0.5f * Mathf.Sin(angle * Mathf.PI / 180.0f), 0.0f);
-                    break;
-                case MoveDirection.FORWARD:
-                    transform.position = initPos + new Vector3(0.0f, 0.5f * Mathf.Sin(angle * Mathf.PI / 180.0f), angle / 180.0f);
-                    break;
-                case MoveDirection.RIGHT:
-                    transform.position = initPos + new Vector3(angle / 180.0f, 0.5f * Mathf.Sin(angle * Mathf.PI / 180.0f), 0.0f);
-                    break;
-            }
-            angle += Time.deltaTime * 1000.0f;
+            //Animación de saltito:
+            //switch (moveDirection)
+            //{
+            //    case MoveDirection.LEFT:
+            //        transform.position = initPos + new Vector3(-angle / 180.0f, 0.5f * Mathf.Sin(angle * Mathf.PI / 180.0f), 0.0f);
+            //        break;
+            //    case MoveDirection.FORWARD:
+            //        transform.position = initPos + new Vector3(0.0f, 0.5f * Mathf.Sin(angle * Mathf.PI / 180.0f), angle / 180.0f);
+            //        break;
+            //    case MoveDirection.RIGHT:
+            //        transform.position = initPos + new Vector3(angle / 180.0f, 0.5f * Mathf.Sin(angle * Mathf.PI / 180.0f), 0.0f);
+            //        break;
+            //}
+            //Desplazamiento
+            angle += (Time.deltaTime * 1000.0f)/1.5f;
             if (angle >= 180.0f)
             {
                 bMoving = false;
