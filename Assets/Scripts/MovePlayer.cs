@@ -31,6 +31,10 @@ public class MovePlayer : MonoBehaviour
         {
             canRotate = true; 
         } 
+        if (objeto.gameObject.CompareTag("bloque"))
+        {
+            canRotate = true;
+        }
     }
 
     void Update()
