@@ -14,7 +14,7 @@ public class CreateLevel : MonoBehaviour
     public GameObject bloke;
     public GameObject placa;
     public float minSpeed, maxSpeed;
-
+    //
     //Start is called before the first frame update
     /*void Start()
     {
