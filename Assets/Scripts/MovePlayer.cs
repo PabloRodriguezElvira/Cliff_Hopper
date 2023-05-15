@@ -52,12 +52,15 @@ public class MovePlayer : MonoBehaviour
             angle = 0;
 
             //Cambiamos dirección.
-            moveDirection = MoveDirection.RIGHT;
+            if (moveDirection == MoveDirection.FORWARD) moveDirection = MoveDirection.RIGHT;
+            else if (moveDirection == MoveDirection.RIGHT) moveDirection = MoveDirection.FORWARD; 
+
             //Rotamos player.
-            if (currentDirection == MoveDirection.LEFT)
-                transform.Rotate(0.0f, 180.0f, 0.0f);
-            else if (currentDirection == MoveDirection.FORWARD)
+            if (currentDirection == MoveDirection.FORWARD)
                 transform.Rotate(0.0f, 90.0f, 0.0f);
+            if (currentDirection == MoveDirection.RIGHT)
+                transform.Rotate(0.0f, -90.0f, 0.0f);
+
             currentDirection = moveDirection;
             AudioSource.PlayClipAtPoint(jumpSound, transform.position);
         }
