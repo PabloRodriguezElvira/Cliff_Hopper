@@ -28,7 +28,7 @@ public class MovePlayer : MonoBehaviour
         bMoving = false;
         canRotate = false;
         index_placa = 0;
-        moveDirection = Vector3.forward; 
+        moveDirection = FORWARD; 
         currentDirection = moveDirection;
     }
 
@@ -36,7 +36,7 @@ public class MovePlayer : MonoBehaviour
     {
         if (objeto.gameObject.CompareTag("PlacaPintada"))
         {
-            //Si pisamos una placa pintada, tenemos que ir en dirección a la siguiente.
+            //Si pisamos una placa pintada, tenemos que ir en direcciÃ³n a la siguiente.
             canRotate = true;
             ++index_placa;
         } 
@@ -63,17 +63,12 @@ public class MovePlayer : MonoBehaviour
             actualPos = transform.position;
             angle = 0;
 
-            Debug.Log("IndexPlaca");
-            Debug.Log(index_placa);
-            //Cambiamos dirección.
-            moveDirection = (Placas[index_placa] - actualPos).normalized;
-
-            Debug.Log("MoveDir");
-            Debug.Log(moveDirection);
+            //Cambiamos direcciÃ³n.
+            moveDirection = (Placas[index_placa] - actualPos);
 
             //Rotamos player.
-            if (currentDirection == Vector3.forward) transform.Rotate(0.0f, 90.0f, 0.0f);
-            else transform.Rotate(0.0f, -90.0f, 0.0f);
+            if (currentDirection == FORWARD) transform.Rotate(0.0f, 90.0f, 0.0f);
+            transform.Rotate(0.0f, -90.0f, 0.0f);
 
             currentDirection = moveDirection;
             AudioSource.PlayClipAtPoint(jumpSound, transform.position);
@@ -85,12 +80,9 @@ public class MovePlayer : MonoBehaviour
             if (angle >= 180.0f)
             {
                 bMoving = false;
-                //actualPos = transform.position;
-                //Vector3 targetPos = actualPos + (moveDirection.normalized * angle);
-                //Vector3 newPos = Vector3.Lerp(actualPos, targetPos, 0.5f * (Time.deltaTime/1000.0f));
-                //transform.position = newPos;
-                transform.position = transform.position + moveDirection;
-                transform.position = new Vector3(transform.position.x, 0.4f, transform.position.z);
+                transform.position = actualPos + moveDirection;
+                Debug.Log("MoveDir");
+                Debug.Log(moveDirection);
             }
         }
     }

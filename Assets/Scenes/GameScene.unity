@@ -391,7 +391,7 @@ GameObject:
   - component: {fileID: 1496198671}
   m_Layer: 0
   m_Name: Level
-  m_TagString: Untagged
+  m_TagString: Level
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -408,12 +408,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad16b99354b02214db8f00e0a5faf055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grassPrefab: {fileID: 9204354760360268162, guid: 7ed01085bb039d7488ba7558ad4be868, type: 3}
-  roadPrefab: {fileID: 53123697275581750, guid: 0cb34d454b5a7274b9c6f56f75478e45, type: 3}
+  Placas: []
   bloke: {fileID: 1473691946996880961, guid: 045fa336a72f0f04c9a0d9dc8ceb0609, type: 3}
   placa: {fileID: 6806313842397973411, guid: c32731b1a80555048a6d8daf1b8699ee, type: 3}
-  minSpeed: 2
-  maxSpeed: 4
 --- !u!4 &1496198672
 Transform:
   m_ObjectHideFlags: 0
@@ -492,7 +489,7 @@ GameObject:
   - component: {fileID: 1851944724}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -568,7 +565,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1851944716}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1, y: 0.5, z: 0}
+  m_LocalPosition: {x: -1, y: 0.4, z: 0}
   m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
   m_ConstrainProportionsScale: 0
   m_Children:

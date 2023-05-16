@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Placa
+  - bloque
+  - PlacaPintada
+  - Level
   layers:
   - Default
   - TransparentFX
