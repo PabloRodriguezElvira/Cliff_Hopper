@@ -148,15 +148,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 463b8b9e83e33734ebbb35f3259c981e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.6951667
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 463b8b9e83e33734ebbb35f3259c981e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.2066667
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 463b8b9e83e33734ebbb35f3259c981e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.7724556
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 463b8b9e83e33734ebbb35f3259c981e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -193,6 +193,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 463b8b9e83e33734ebbb35f3259c981e, type: 3}
       propertyPath: m_Name
       value: chicken
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151388028547126963, guid: 463b8b9e83e33734ebbb35f3259c981e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 463b8b9e83e33734ebbb35f3259c981e, type: 3}
@@ -410,7 +414,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Placas: []
   bloke: {fileID: 1473691946996880961, guid: 045fa336a72f0f04c9a0d9dc8ceb0609, type: 3}
-  placa: {fileID: 6806313842397973411, guid: c32731b1a80555048a6d8daf1b8699ee, type: 3}
+  blokeGiro: {fileID: 5329051240485652698, guid: c14f3e629fe567445a9092192861f835, type: 3}
 --- !u!4 &1496198672
 Transform:
   m_ObjectHideFlags: 0
@@ -505,8 +509,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.8808115, y: 1.276873, z: 0.73939246}
+  m_Center: {x: -0.7066205, y: 0.18818472, z: -0.7721267}
 --- !u!23 &1851944718
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -565,7 +569,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1851944716}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1, y: 0.4, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -598,7 +602,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f54bd35c02058c49b651316893d69d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placaPintada: {fileID: 6693922230095508086, guid: 3aab9766f22ef5b4fa64202c8b89ae29, type: 3}
+  bloquePintado: {fileID: 1622159569853545188, guid: b483fe359583a1f44873fbd103b0ab77, type: 3}
 --- !u!54 &1851944724
 Rigidbody:
   m_ObjectHideFlags: 0

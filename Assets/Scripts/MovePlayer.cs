@@ -11,7 +11,7 @@ using UnityEngine;
 public class MovePlayer : MonoBehaviour
 {
     //Para obtener las placas de level.
-    private Vector3[] Placas;
+    private List<Vector3> Placas;
 
 
     public AudioClip jumpSound;
@@ -39,10 +39,6 @@ public class MovePlayer : MonoBehaviour
             //Si pisamos una placa pintada, tenemos que ir en dirección a la siguiente.
             canRotate = true;
             ++index_placa;
-        } 
-        if (objeto.gameObject.CompareTag("bloque"))
-        {
-            canRotate = true;
         }
     }
 
@@ -63,17 +59,11 @@ public class MovePlayer : MonoBehaviour
             actualPos = transform.position;
             angle = 0;
 
-            Debug.Log("IndexPlaca");
-            Debug.Log(index_placa);
             //Cambiamos dirección.
             moveDirection = (Placas[index_placa] - actualPos).normalized;
 
-            Debug.Log("MoveDir");
-            Debug.Log(moveDirection);
-
             //Rotamos player.
-            if (currentDirection == Vector3.forward) transform.Rotate(0.0f, 90.0f, 0.0f);
-            else transform.Rotate(0.0f, -90.0f, 0.0f);
+            transform.rotation = Quaternion.LookRotation(moveDirection);
 
             currentDirection = moveDirection;
             AudioSource.PlayClipAtPoint(jumpSound, transform.position);
@@ -85,12 +75,13 @@ public class MovePlayer : MonoBehaviour
             if (angle >= 180.0f)
             {
                 bMoving = false;
+                transform.position = transform.position + moveDirection;
+
+                //POR SI SIRVE PARA EL NUEVO PLAYER:
                 //actualPos = transform.position;
                 //Vector3 targetPos = actualPos + (moveDirection.normalized * angle);
                 //Vector3 newPos = Vector3.Lerp(actualPos, targetPos, 0.5f * (Time.deltaTime/1000.0f));
                 //transform.position = newPos;
-                transform.position = transform.position + moveDirection;
-                transform.position = new Vector3(transform.position.x, 0.4f, transform.position.z);
             }
         }
     }

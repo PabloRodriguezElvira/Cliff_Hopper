@@ -5,14 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class Collision : MonoBehaviour
 {
-    public GameObject placaPintada;
+    public GameObject bloquePintado;
     void OnTriggerEnter(Collider objeto)
     {
 
         if (objeto.gameObject.CompareTag("Placa")) 
         {
             objeto.gameObject.SetActive(false);
-            Instantiate(placaPintada, objeto.transform.position, objeto.transform.rotation); 
+            Instantiate(bloquePintado, objeto.transform.position, objeto.transform.rotation); 
         }
 
         Debug.Log("Colisio = " + objeto.gameObject.name);

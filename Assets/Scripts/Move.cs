@@ -9,6 +9,6 @@ public class Move : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(speed * Time.deltaTime);
+        transform.Translate(4.0f * speed * Time.deltaTime);
     }
 }

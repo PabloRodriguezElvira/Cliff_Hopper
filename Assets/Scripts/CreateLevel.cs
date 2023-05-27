@@ -9,68 +9,53 @@ enum TerrainType { Grass, Road };
 
 public class CreateLevel : MonoBehaviour
 {
-    public Vector3[] Placas;
-    public GameObject bloke;
-    public GameObject placa;
+	public List<Vector3> Placas;
+	public GameObject bloke;
+	public GameObject blokeGiro;
+	float sizeBlock;
 
-    void Start()
-    {
-        GameObject obj;
-        Placas = new Vector3[20];
-        int k = 0;
-        float sizeBlock = 4.0f;
-        float sizePlaca = 3.0f;
-        int blocks = 4;
 
-        Vector3 position;
+	Vector3 GeneratePath(Vector3 start, Vector3 dir, int pathLength)
+	{
+		Vector3 pos = new Vector3();
+		for (int i = 1; i < pathLength + 1; ++i)
+		{
+			pos = start + i * sizeBlock * dir;
+			GameObject newBlock;
 
-        //Tiles en línea recta:
-        for (int i = 0; i < 4; ++i)
-        {
-            position = new Vector3(0.0f, -4.0f, i * sizeBlock);
-            obj = (GameObject)Instantiate(bloke);
-            obj.transform.Translate(position);
-            obj.transform.parent = transform;
-        }
-        //Giradas
-        for (int i = 0; i < 4; ++i)
-        {
-            position = new Vector3(i * sizeBlock, -4.0f, 4.0f * sizeBlock);
-            obj = (GameObject)Instantiate(bloke);
-            obj.transform.Translate(position);
-            obj.transform.parent = transform;
-            
-            //Placa:
-            if (i == 0)
-            {
-                position = new Vector3(i * sizeBlock, 0.0f, 4.0f * sizePlaca);
-                Placas[k] = position; ++k;
-                Debug.Log(position);
+			//Pintamos bloque de giro:
+			if (i == pathLength)
+			{
+				newBlock = Instantiate(blokeGiro, pos, Quaternion.identity);
+				Vector3 centroBloque = new Vector3(pos.x, 0.0f, pos.z - sizeBlock/2.0f);
+				Placas.Add(centroBloque);
+			}
+			//Bloques normales:
+			else newBlock = Instantiate(bloke, pos, Quaternion.identity);
+			newBlock.transform.parent = transform;
+		}
+		return pos;
+	}
 
-                obj = (GameObject)Instantiate(placa);
-                obj.transform.Translate(position);
-                obj.transform.parent = transform;
-            }
-        }
-        //Tiles en línea recta:
-        for (int i = 4; i < 8; ++i)
-        {
-            position = new Vector3(blocks * sizeBlock, -4.0f, i * sizeBlock);
-            obj = (GameObject)Instantiate(bloke);
-            obj.transform.Translate(position);
-            obj.transform.parent = transform;
+	void Start()
+	{
+		Placas = new List<Vector3>();
+		sizeBlock = 4.0f;
+		int nPaths = 20;
+		int minLen = 4, maxLen = 10;
+		Vector3 start = new Vector3(0.0f, -4.0f, 0.0f);
 
-            //Placa
-            if (i == 4)
-            {
-                position = new Vector3(blocks * sizeBlock, 0.0f, i * sizePlaca);
-                Debug.Log(position);
-                Placas[k] = position; ++k;
+		for (int i = 0; i < nPaths; ++i)
+		{
+			Vector3 dir;
+			if (i % 2 == 0) dir = Vector3.forward;
+			else dir = Vector3.right;
 
-                obj = (GameObject)Instantiate(placa);
-                obj.transform.Translate(position);
-                obj.transform.parent = transform;
-            }
-        }
-    }
+			//Se genera el camino de minimo 4 y maximo 10 bloques.
+			float p = Random.value * (maxLen - minLen) + minLen;
+			int pathLen = (int)p;
+
+			start = GeneratePath(start, dir, (int)pathLen);
+		}
+	}
 }
