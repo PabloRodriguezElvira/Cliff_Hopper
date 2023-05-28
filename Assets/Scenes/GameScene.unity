@@ -415,6 +415,13 @@ MonoBehaviour:
   Placas: []
   bloke: {fileID: 1473691946996880961, guid: 045fa336a72f0f04c9a0d9dc8ceb0609, type: 3}
   blokeGiro: {fileID: 5329051240485652698, guid: c14f3e629fe567445a9092192861f835, type: 3}
+  moneda: {fileID: 5230879111555890885, guid: ea22e1630275fe14087582afa8b4fcfc, type: 3}
+  trampas:
+  - {fileID: 2306687866329557636, guid: ce60e4380483d5f4891db44124a6b904, type: 3}
+  - {fileID: 8395920173973142631, guid: 77e946d6dc476d14bae707b779c359af, type: 3}
+  - {fileID: 3263134299810777673, guid: 3313c1742552b224ba68492fe7a7ee50, type: 3}
+  - {fileID: 6052841882656095450, guid: 19c231162a5cc0a468522628a7d231ce, type: 3}
+  - {fileID: 1210642193984576453, guid: 2b79504bd58d7094089d0dea9d12d855, type: 3}
 --- !u!4 &1496198672
 Transform:
   m_ObjectHideFlags: 0
@@ -476,6 +483,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: {x: 0, y: 0, z: 1}
+  player: {fileID: 1851944720}
+  suavidad: 1
+  offset: {x: 0, y: 0, z: 10}
 --- !u!1 &1851944716
 GameObject:
   m_ObjectHideFlags: 0

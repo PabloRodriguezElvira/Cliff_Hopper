@@ -8,6 +8,11 @@ TagManager:
   - bloque
   - PlacaPintada
   - Level
+  - trampa1
+  - trampa2
+  - trampa3
+  - trampa4
+  - trampa5
   layers:
   - Default
   - TransparentFX
