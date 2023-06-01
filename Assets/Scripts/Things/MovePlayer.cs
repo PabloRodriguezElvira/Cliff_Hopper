@@ -71,18 +71,22 @@ public class MovePlayer : MonoBehaviour
         if (bMoving)
         {
             //Desplazamiento
-            angle += (Time.deltaTime * 1000.0f)/1.5f;
-            if (angle >= 180.0f)
-            {
-                bMoving = false;
-                transform.position = transform.position + moveDirection;
+            transform.position = transform.position + (1.0f/40.0f) * moveDirection;
+
+
+            //Desplazamiento
+            //angle += (Time.deltaTime * 1000.0f)/1.5f;
+            //if (angle >= 180.0f)
+            //{
+            //    bMoving = false;
+            //    transform.position = transform.position + moveDirection;
 
                 //POR SI SIRVE PARA EL NUEVO PLAYER:
                 //actualPos = transform.position;
                 //Vector3 targetPos = actualPos + (moveDirection.normalized * angle);
                 //Vector3 newPos = Vector3.Lerp(actualPos, targetPos, 0.5f * (Time.deltaTime/1000.0f));
                 //transform.position = newPos;
-            }
+            //}
         }
     }
 }
