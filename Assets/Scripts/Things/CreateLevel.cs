@@ -10,6 +10,8 @@ enum TerrainType { Grass, Road };
 
 public class CreateLevel : MonoBehaviour
 {
+	public static CreateLevel instance;
+
 	public List<Vector3> Placas;
 	public GameObject bloke;
 	public GameObject blokeGiro;
@@ -18,7 +20,35 @@ public class CreateLevel : MonoBehaviour
 	float sizeBlock, trampaProb, coinProb;
 	float offsetYCoin;
 
+	void Awake()
+	{
+		instance = this;
+	}
 
+	public void crearNivel()
+	{
+		Placas = new List<Vector3>();
+		sizeBlock = 4.0f;
+		trampaProb = 0.15f;  coinProb = 0.15f;
+		int nPaths = 20;
+		int minLen = 4, maxLen = 10;
+
+		Vector3 start = new Vector3(0.0f, -4.0f, 0.0f);
+
+		for (int i = 0; i < nPaths; ++i)
+		{
+			Vector3 dir;
+			if (i % 2 == 0) dir = Vector3.forward;
+			else dir = Vector3.right;
+
+			//Se genera el camino de minimo 4 y maximo 10 bloques.
+			float p = Random.value * (maxLen - minLen) + minLen;
+			int pathLen = (int)p;
+
+			start = GeneratePath(start, dir, (int)pathLen);
+		}
+	}	
+	
 	Vector3 GeneratePath(Vector3 start, Vector3 dir, int pathLength)
 	{
 		//Para controlar las trampas consecutivas.
@@ -33,7 +63,7 @@ public class CreateLevel : MonoBehaviour
 			if (i == pathLength)
 			{
 				newBlock = Instantiate(blokeGiro, pos, Quaternion.identity);
-				Vector3 centroBloque = new Vector3(pos.x, 0.0f, pos.z - sizeBlock / 2.0f);
+				Vector3 centroBloque = new Vector3(pos.x, 0.0f, pos.z - sizeBlock/2);
 				Placas.Add(centroBloque);
 			}
 			//Bloques normales/trampas:
@@ -74,27 +104,4 @@ public class CreateLevel : MonoBehaviour
 		return pos;
 	}
 
-	void Start()
-	{
-		Placas = new List<Vector3>();
-		sizeBlock = 4.0f;
-		trampaProb = 0.15f;  coinProb = 0.15f;
-		int nPaths = 20;
-		int minLen = 4, maxLen = 10;
-
-		Vector3 start = new Vector3(0.0f, -4.0f, 0.0f);
-
-		for (int i = 0; i < nPaths; ++i)
-		{
-			Vector3 dir;
-			if (i % 2 == 0) dir = Vector3.forward;
-			else dir = Vector3.right;
-
-			//Se genera el camino de minimo 4 y maximo 10 bloques.
-			float p = Random.value * (maxLen - minLen) + minLen;
-			int pathLen = (int)p;
-
-			start = GeneratePath(start, dir, (int)pathLen);
-		}
-	}
 }
