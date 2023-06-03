@@ -63,17 +63,13 @@ public class GameManager : StaticInstance<GameManager> {
 	private void HandleMenu()
     {    
         //Crear Nivel:
-        CreateLevel.instance.crearNivel();
+        Level.instance.crearNivel();
 
         //Reset Player
-        player.GetComponent<MovePlayer>().resetPlayer();
+        player.GetComponent<Player>().resetPlayer();
 
         //Desactivar HUD:
         hud.SetActive(false);
-
-        //Reset monedas y giros:
-        player.GetComponent<MovePlayer>().setCoins(0);
-        player.GetComponent<MovePlayer>().setGiros(0);
     }
 
     private void HandlePauseMenu()
