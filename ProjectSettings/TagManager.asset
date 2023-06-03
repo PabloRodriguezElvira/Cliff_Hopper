@@ -13,6 +13,11 @@ TagManager:
   - trampa3
   - trampa4
   - trampa5
+  - mainmenu
+  - instructions
+  - creditos
+  - pellet
+  - hud
   layers:
   - Default
   - TransparentFX

@@ -27,6 +27,13 @@ public class CreateLevel : MonoBehaviour
 
 	public void crearNivel()
 	{
+		//Eliminar el nivel anterior.
+		foreach (Transform child in transform)
+		{
+			GameObject.Destroy(child.gameObject);
+		}
+		
+		//Crear nivel:
 		Placas = new List<Vector3>();
 		sizeBlock = 4.0f;
 		trampaProb = 0.15f;  coinProb = 0.15f;
@@ -93,8 +100,8 @@ public class CreateLevel : MonoBehaviour
 				//Se randomiza el offset de Y
 				offsetYCoin = Random.value * (7 - 4.7f) + 4.7f;
 				Vector3 offset;
-				if (dir == Vector3.forward) offset = new Vector3(-1.0f, offsetYCoin, 0.0f);
-				else offset = new Vector3(0.0f, offsetYCoin, -2.5f);
+				if (dir == Vector3.forward) offset = new Vector3(-1.0f, 4.7f, 0.0f);
+				else offset = new Vector3(0.0f, 4.7f, -2.5f);
 
 				Vector3 posCoin = pos + offset;
 				coin = Instantiate(moneda, posCoin, Quaternion.identity);

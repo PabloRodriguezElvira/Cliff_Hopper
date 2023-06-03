@@ -7,11 +7,16 @@ using UnityEngine;
 /// </summary>
 public class GameManager : StaticInstance<GameManager> {
     public static event Action<GameState> OnGameStateChanged;
-    //public static event Action<GameState> OnAfterStateChanged;
+    
+    //HUD:
+    public GameObject hud;
+
+    //Player:
+    public GameObject player;
 
     public GameState State { get; private set; }
 
-    void Start() => ChangeState(GameState.Starting);
+    void Start() => ChangeState(GameState.Menu);
 
     public void ChangeState(GameState newState) {
         OnGameStateChanged?.Invoke(newState);
@@ -19,11 +24,11 @@ public class GameManager : StaticInstance<GameManager> {
         State = newState;
         switch (newState)
         {
-            case GameState.Starting:
-                HandleStarting();
-                break;
             case GameState.Menu:
                 HandleMenu();
+                break;
+            case GameState.PauseMenu:
+                HandlePauseMenu();
                 break;
             case GameState.Play:
                 HandlePlay();
@@ -46,23 +51,34 @@ public class GameManager : StaticInstance<GameManager> {
         Debug.Log($"New state: {newState}");
     }
 
-    private void HandleStarting()
-    {
-        //Crear Nivel:
-        CreateLevel.instance.crearNivel();
-
-        //Cambiar estado a Menu:
-        ChangeState(GameState.Menu);
-    }
-
     private void HandlePlay()
     {
         //Desactivar Menu;
         MenuManager.instance.currentState.SetActive(false);
+
+        //Activar HUD:
+        hud.SetActive(true);
     }
 
 	private void HandleMenu()
+    {    
+        //Crear Nivel:
+        CreateLevel.instance.crearNivel();
+
+        //Reset Player
+        player.GetComponent<MovePlayer>().resetPlayer();
+
+        //Desactivar HUD:
+        hud.SetActive(false);
+
+        //Reset monedas y giros:
+        player.GetComponent<MovePlayer>().setCoins(0);
+        player.GetComponent<MovePlayer>().setGiros(0);
+    }
+
+    private void HandlePauseMenu()
     {
+        
     }
 
 }
@@ -75,5 +91,6 @@ public class GameManager : StaticInstance<GameManager> {
 public enum GameState {
     Starting = 0,
     Menu = 1,
-    Play = 2 
+    PauseMenu = 2,
+    Play = 3 
 }

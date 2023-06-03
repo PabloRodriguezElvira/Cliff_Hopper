@@ -11,7 +11,8 @@ public class MenuManager : MonoBehaviour
 	{
 		mainMenu,
 		creditsPage,
-		instructionsPage
+		instructionsPage,
+		confirmationDialog
 	}
 
 	public List<GameObject> states;
@@ -41,18 +42,15 @@ public class MenuManager : MonoBehaviour
 		{ 
 			if (Input.GetKeyDown(KeyCode.Escape))
 			{
-				SetState(menuState.mainMenu);
+				if (!currentState.CompareTag("mainmenu")) SetState(menuState.mainMenu);
+				else SetState(menuState.confirmationDialog);	
 			}
 			else if (Input.GetKeyDown(KeyCode.Space))
 			{
-				GameManager.Instance.ChangeState(GameState.Play);
+				//Solo podemos acceder al juego si estamos en el menú principal.
+				if (currentState.CompareTag("mainmenu")) GameManager.Instance.ChangeState(GameState.Play);
 			}
 		}
-	}
-
-	public void changeToCredits()
-	{
-		SetState(menuState.creditsPage);
 	}
 
 	private void SetState(menuState st)
@@ -71,12 +69,43 @@ public class MenuManager : MonoBehaviour
 			case menuState.instructionsPage:
 				currentState = states[2];
 				break;
+			case menuState.confirmationDialog:
+				currentState = states[3];
+				break;
 		}
 		currentState.SetActive(true);
 	}
 
-	public void quitGame()
+
+	public void changeToCredits()
 	{
+		SetState(menuState.creditsPage);
+	}
+
+	public void changeToInfo()
+	{
+		SetState(menuState.instructionsPage);
+	}
+
+	public void changeToMainMenu()
+	{
+		SetState(menuState.mainMenu);
+	}
+
+	public void changeToLeaderboard()
+	{
+
+	}
+
+	public void exitDialog()
+	{
+		SetState(menuState.confirmationDialog);
+	}
+
+	public void exitGame()
+	{
+		Debug.Log("BYE BYE!");
 		Application.Quit();
 	}
+	
 }
