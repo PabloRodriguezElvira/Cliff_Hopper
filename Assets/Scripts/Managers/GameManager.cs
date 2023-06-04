@@ -1,10 +1,6 @@
 using System;
 using UnityEngine;
 
-/// <summary>
-/// Nice, easy to understand enum-based game manager. For larger and more complex games, look into
-/// state machines. But this will serve just fine for most games.
-/// </summary>
 public class GameManager : StaticInstance<GameManager> {
     public static event Action<GameState> OnGameStateChanged;
     
@@ -17,11 +13,20 @@ public class GameManager : StaticInstance<GameManager> {
     //Lose window:
     [SerializeField] private GameObject loseDialog;
 
-    //Camera:
-    [SerializeField] private GameObject camera;
+    //Win window:
+    [SerializeField] private GameObject winDialog;
 
     //Highscore:
     [SerializeField] private int highscore;
+
+    //Audio Source:
+    [SerializeField] private AudioSource musicSource;
+
+    //Menu Theme:
+    [SerializeField] private AudioClip menuTheme;
+
+    //Game Theme:
+    [SerializeField] private AudioClip gameTheme;
 
     public GameState State { get; private set; }
 
@@ -45,20 +50,12 @@ public class GameManager : StaticInstance<GameManager> {
             case GameState.Lose:
                 HandleLose();
                 break;
-            //case GameState.SpawningEnemies:
-            //    HandleSpawningEnemies();
-            //    break;
-            //case GameState.HeroTurn:
-            //    HandleHeroTurn();
-            //    break;
-            //case GameState.EnemyTurn:
-            //    break;
-            //case GameState.Win:
-            //    break;
+            case GameState.Win:
+                HandleWin();
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
         } 
-        Debug.Log($"New state: {newState}");
     }
 
     private void HandlePlay()
@@ -69,6 +66,10 @@ public class GameManager : StaticInstance<GameManager> {
         //Activar HUD y desactivar lose window:
         hud.SetActive(true);
         loseDialog.SetActive(false);
+
+        musicSource.volume = 0.025f;
+        musicSource.clip = gameTheme;
+        musicSource.Play();
     }
 
 	private void HandleMenu()
@@ -79,21 +80,34 @@ public class GameManager : StaticInstance<GameManager> {
         //Reset Player
         player.GetComponent<Player>().resetPlayer();
 
-        //Desactivar HUD y lose window:
+        //Desactivar HUD, lose y win window:
         hud.SetActive(false);
         loseDialog.SetActive(false);
+        winDialog.SetActive(false);
+
+        musicSource.volume = 0.05f;
+        musicSource.clip = menuTheme;
+        musicSource.Play();
     }
     
     private void HandleLose()
     {
         //Fog roja:
         Level.instance.changeFogColor();
-        //Desactivar HUD:
+        //Desactivar HUD y win window:
         hud.SetActive(false);
+        winDialog.SetActive(false);
         //Show lose:
         loseDialog.SetActive(true);
-        //Stop camera:
-        //camera.GetComponent<Move>().speed = Vector3.zero;
+    }
+
+    private void HandleWin()
+    {
+        //Desactivar HUD y lose window:
+        hud.SetActive(true);
+        loseDialog.SetActive(false);
+        //Show win:
+        winDialog.SetActive(true);
     }
 
     private void HandlePauseMenu()
@@ -102,10 +116,6 @@ public class GameManager : StaticInstance<GameManager> {
  
 }
 
-/// <summary>
-/// This is obviously an example and I have no idea what kind of game you're making.
-/// You can use a similar manager for controlling your menu states or dynamic-cinematics, etc
-/// </summary>
 [Serializable]
 public enum GameState {
     Starting = 0,

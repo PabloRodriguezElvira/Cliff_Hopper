@@ -16,7 +16,7 @@ public class MenuManager : MonoBehaviour
 		highscorePage
 	}
 
-	[SerializeField] private List<GameObject> states;
+    [SerializeField] private List<GameObject> states;
 
 	public GameObject currentState = null;
 
@@ -114,7 +114,6 @@ public class MenuManager : MonoBehaviour
 
 	public void exitGame()
 	{
-		Debug.Log("BYE BYE!");
 		Application.Quit();
 	}
 	

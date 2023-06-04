@@ -10,8 +10,12 @@ using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
-    public AudioClip jumpSound;
-    bool bMoving, bGrounded, bDJumping;
+    public AudioClip godModeSound;
+    public AudioClip jumpSound1, jumpSound2, springSound;
+    public AudioClip robloxSound, tomscreamSound, succSound;
+    public AudioClip tpSound, getCoinSound, loseCoinSound;
+
+    bool godMode, bMoving, bGrounded, bDJumping;
 
     float speed, jumpHeight, gravity, ySpeed;
     bool canRotate, rotated;
@@ -44,6 +48,7 @@ public class Player : MonoBehaviour
         transform.position = Vector3.zero;
         transform.rotation = Quaternion.identity;
 
+        godMode = false;
         bMoving = false;
         bGrounded = true;
         bDJumping = false;
@@ -66,16 +71,27 @@ public class Player : MonoBehaviour
         chomp.resetChomp();
     }
 
+    void loseGame()
+    {
+        //Actualizamos puntuación:
+        if (score > highscore) highscore = score;
+        highscoreDisplay.text = highscore.ToString();
+
+        GameManager.Instance.ChangeState(GameState.Lose);
+    }
+
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            godMode = !godMode;
+            if (godMode) AudioSource.PlayClipAtPoint(jumpSound1, transform.position);
+        }
+
         if (GameManager.Instance.State == GameState.Play)
         {
             coinsDisplay.text = coins.ToString();
             turnsDisplay.text = turns.ToString();
-
-            //Actualizamos puntuación:
-            if (score > highscore) highscore = score;
-            highscoreDisplay.text = highscore.ToString();
 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -87,47 +103,66 @@ public class Player : MonoBehaviour
 
             if (bMoving)
             {
-                if (spacePressed && !Input.GetKey(KeyCode.Space)) spacePressed = false;
-                if (bGrounded)
+                if (godMode && canRotate && turns != 59)
                 {
-                    transform.position = new Vector3(transform.position.x, 0, transform.position.z);
-                    bDJumping = false;
-                    ySpeed = 0;
+                    canRotate = false;
+                    rotated = true;
+
+                    //Cambiamos dirección.
+                    currentDestination = nextDestination + 16.0f * (nextDestination - transform.position).normalized;
+
+                    //Rotamos player.
+                    transform.rotation = Quaternion.LookRotation(currentDestination);
+
+                    ++turns;
+                    ++score;
                 }
-                else ySpeed += gravity * Time.deltaTime;
-
-                if (Input.GetKey(KeyCode.Space) && !spacePressed)
+                else
                 {
-                    spacePressed = true;
-
-                    if (canRotate)
+                    if (spacePressed && !Input.GetKey(KeyCode.Space)) spacePressed = false;
+                    if (bGrounded)
                     {
-                        canRotate = false;
-                        rotated = true;
-
-                        //Cambiamos dirección.
-                        currentDestination = nextDestination + 16.0f * (nextDestination - transform.position).normalized;
-
-                        //Rotamos player.
-                        transform.rotation = Quaternion.LookRotation(currentDestination);
-
-                        ++turns;
-                        ++score;
-
-                        AudioSource.PlayClipAtPoint(jumpSound, transform.position);
-                    }
-                    else if (bGrounded)
-                    {
-                        bGrounded = false;
+                        transform.position = new Vector3(transform.position.x, 0, transform.position.z);
                         bDJumping = false;
-                        ySpeed = Mathf.Sqrt(jumpHeight * (-2) * gravity);
+                        ySpeed = 0;
                     }
-                    else if (!bDJumping)
+                    else ySpeed += gravity * Time.deltaTime;
+
+                    if (Input.GetKey(KeyCode.Space) && !spacePressed)
                     {
-                        bDJumping = true;
-                        ySpeed = Mathf.Sqrt((jumpHeight) * (-2) * gravity);
+                        spacePressed = true;
+
+                        if (canRotate)
+                        {
+                            canRotate = false;
+                            rotated = true;
+
+                            //Cambiamos dirección.
+                            currentDestination = nextDestination + 16.0f * (nextDestination - transform.position).normalized;
+
+                            //Rotamos player.
+                            transform.rotation = Quaternion.LookRotation(currentDestination);
+
+                            ++turns;
+                            ++score;
+                        }
+                        else if (bGrounded)
+                        {
+                            bGrounded = false;
+                            bDJumping = false;
+                            ySpeed = Mathf.Sqrt(jumpHeight * (-2) * gravity);
+
+                            AudioSource.PlayClipAtPoint(jumpSound1, transform.position);
+                        }
+                        else if (!bDJumping)
+                        {
+                            bDJumping = true;
+                            ySpeed = Mathf.Sqrt(jumpHeight * (-2) * gravity);
+
+                            AudioSource.PlayClipAtPoint(jumpSound2, transform.position);
+                        }
+                        else spacePressed = false;
                     }
-                    else spacePressed = false;
                 }
                 //Desplazamiento
                 transform.position = Vector3.MoveTowards(transform.position, new Vector3(currentDestination.x, transform.position.y, currentDestination.z), speed * Time.deltaTime);
@@ -136,15 +171,15 @@ public class Player : MonoBehaviour
             else
             {
                 bMoving = true;
-                AudioSource.PlayClipAtPoint(jumpSound, transform.position);
+                //AudioSource.PlayClipAtPoint(jumpSound1, transform.position);
             }
 
             //Perder.
             if (transform.position.y <= -14.0f)
-			{
-				GameManager.Instance.ChangeState(GameState.Lose);
-			}
-
+            {
+                AudioSource.PlayClipAtPoint(tomscreamSound, transform.position);
+                loseGame();
+            }
         }
     }
 
@@ -156,9 +191,13 @@ public class Player : MonoBehaviour
         if (objeto.gameObject.CompareTag("Coin"))
         {
             Destroy(objeto.gameObject);
-
+            AudioSource.PlayClipAtPoint(getCoinSound, transform.position);
             ++coins;
             score += 2;
+        }
+        else if (objeto.gameObject.CompareTag("Chomp"))
+        {
+            if (!godMode) loseGame();
         }
         else
         {
@@ -177,6 +216,53 @@ public class Player : MonoBehaviour
 
                 nextDestination = objeto.gameObject.GetComponent<TurnBlock>().getNextDestination();
             }
+            else if (objeto.gameObject.CompareTag("KillerTrap1"))
+            {
+                AudioSource.PlayClipAtPoint(robloxSound, transform.position);
+                if (!godMode) loseGame();
+            }
+            else if (objeto.gameObject.CompareTag("SlowTrap2"))
+            {
+                AudioSource.PlayClipAtPoint(succSound, transform.position);
+                if (!godMode) speed = 4.0f;
+            }
+            else if (objeto.gameObject.CompareTag("TpTrap3"))
+            {
+                AudioSource.PlayClipAtPoint(tpSound, transform.position);
+                if (!godMode) transform.position -= 4 * (currentDestination - transform.position).normalized;
+            }
+            else if (objeto.gameObject.CompareTag("MoneyTrap4"))
+            {
+                AudioSource.PlayClipAtPoint(loseCoinSound, transform.position);
+
+                if (!godMode)
+                {
+                    if (coins >= 2)
+                    {
+                        coins -= 2;
+                        score -= 4;
+                    }
+                    else if (coins == 1)
+                    {
+                        coins = 0;
+                        if (score >= 5) score -= 5;
+                        else score = 0;
+                    }
+                    else if (score >= 6) score -= 6;
+                    else score = 0;
+                }
+            }
+            else if (objeto.gameObject.CompareTag("JumpTrap5"))
+            {
+                AudioSource.PlayClipAtPoint(springSound, transform.position);
+
+                if (!godMode)
+                {
+                    bGrounded = false;
+                    bDJumping = true;
+                    ySpeed = Mathf.Sqrt((jumpHeight + 2) * (-2) * gravity);
+                }
+            }
         }
     }
 
@@ -190,6 +276,14 @@ public class Player : MonoBehaviour
             {
                 //Si dejamos de pisar un TurnBlock, dejamos de permitir ir en dirección a la siguiente.
                 canRotate = false;
+            }
+            else if (objeto.gameObject.CompareTag("SlowTrap2"))
+            {
+                speed = 12.0f;
+            }
+            else if (objeto.gameObject.CompareTag("blockwin"))
+            {
+                GameManager.Instance.ChangeState(GameState.Win);
             }
         }
     }
@@ -206,8 +300,11 @@ public class Player : MonoBehaviour
                 ySpeed = 0;
             }
         }
-
-        if (rotated && objeto.gameObject.CompareTag("TurnBlock"))
+        if (objeto.gameObject.CompareTag("TpTrap3"))
+        {
+            if (!godMode) transform.position -= 0.5f * (currentDestination - transform.position).normalized;
+        }
+        else if (rotated && objeto.gameObject.CompareTag("TurnBlock"))
         {
             //Si estamos en un TurnBlock y giramos, lo desactivamos y spawneamos TurnedBlock.
             rotated = false;

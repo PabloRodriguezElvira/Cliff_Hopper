@@ -14,8 +14,9 @@ public class Level : MonoBehaviour
     [SerializeField] private List<GameObject> Traps;
     [SerializeField] private GameObject CoinPrefab;
 	[SerializeField] private GameObject FogPrefab;
+    [SerializeField] private GameObject BlockWinPrefab;
 
-	float sizeBlock, trampaProb, coinProb;
+    float sizeBlock, trampaProb, coinProb;
 	float offsetYCoin;
 
     void Awake()
@@ -47,16 +48,15 @@ public class Level : MonoBehaviour
         }
 
         sizeBlock = 4.0f;
-		trampaProb = 0.15f;  coinProb = 0.15f;
-		int nPaths = 20;
-		int minLen = 4, maxLen = 10;
+		trampaProb = 0.35f;  coinProb = 0.15f;
+		int nPaths = 60;
+		int minLen = 2, maxLen = 9;
 
 		Vector3 start = new Vector3(0.0f, -4.0f, -2.0f);
 		Vector3 dir = Vector3.forward;
 
-		float p = Random.value * (maxLen - minLen) + minLen;
         int pathLen1 = 4;
-		int pathLen2 = (int)p;
+		int pathLen2 = Random.Range(minLen, maxLen);
 
         start = GeneratePath(start, dir, ref pathLen1, pathLen2);
 
@@ -66,13 +66,17 @@ public class Level : MonoBehaviour
 			if (i % 2 == 0) dir = Vector3.forward;
 			else dir = Vector3.right;
 
-			//Se genera el camino de minimo 4 y maximo 10 bloques.
-			p = Random.value * (maxLen - minLen) + minLen;
-			pathLen2 = (int)p;
+			//Se genera el camino de minimo 2 y maximo 8 bloques.
+			pathLen2 = Random.Range(minLen, maxLen);
 
             start = GeneratePath(start, dir, ref pathLen1, pathLen2);
         }
-	}
+
+        //Generate last block:
+        Vector3 pos = start + sizeBlock * dir;
+        GameObject lastBlock = Instantiate(BlockWinPrefab, pos, Quaternion.identity);
+        lastBlock.transform.parent = transform;
+    }
 
 	Vector3 GeneratePath(Vector3 start, Vector3 dir, ref int pathLength1, int pathLength2)
 	{
@@ -100,16 +104,14 @@ public class Level : MonoBehaviour
 			//Bloques normales/trampas:
 			else
 			{
-				//if (consecTraps < 2 && Random.value <= trampaProb)
-				//{
-				//	++consecTraps;
-				//	//Cada trampa tiene probabilidad 1/5.
-				//	float p = Random.value * 4;
-				//	int trap = (int)p;
-				//	Debug.Log(trap);
-				//	newBlock = Instantiate(Traps[trap], pos, Quaternion.identity);
-				//}
-				//else
+				if (consecTraps < 2 && Random.value <= trampaProb && pos.x != 0.0f && i != 1)
+				{
+					++consecTraps;
+					//Cada trampa tiene probabilidad 1/5.
+					int trap = Random.Range(0, 5);
+					newBlock = Instantiate(Traps[trap], pos, Quaternion.identity);
+				}
+				else
 				{
 					consecTraps = 0;
 					newBlock = Instantiate(BlockPrefab, pos, Quaternion.identity);

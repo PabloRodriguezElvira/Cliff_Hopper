@@ -10,9 +10,10 @@ using UnityEngine.UIElements;
 
 public class Chomp : MonoBehaviour
 {
-    public AudioClip jumpSound;
+    public AudioClip wakaSound;
     bool bMoving;
 
+    int wakaCounter;
     float speed;
     Vector3 currentDestination, nextDestination, direction, nextCenter;
 
@@ -23,11 +24,12 @@ public class Chomp : MonoBehaviour
 
     public void resetChomp()
     {
-        transform.position = new Vector3(0.0f, 0.2f, -24.0f);
+        transform.position = new Vector3(0.0f, 0.0f, -24.0f);
         transform.rotation = Quaternion.identity;
 
         bMoving = false;
 
+        wakaCounter = 0;
         speed = 12.0f;
 
         direction = Vector3.forward;
@@ -48,6 +50,12 @@ public class Chomp : MonoBehaviour
             if (bMoving)
             {
                 transform.position = Vector3.MoveTowards(transform.position, new Vector3(currentDestination.x, transform.position.y, currentDestination.z), speed * Time.deltaTime);
+                if (wakaCounter == 0)
+                {
+                    AudioSource.PlayClipAtPoint(wakaSound, transform.position);
+                    wakaCounter = 230;
+                }
+                else --wakaCounter;
             }
             else
             {
