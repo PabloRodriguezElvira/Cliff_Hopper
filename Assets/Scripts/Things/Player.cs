@@ -25,6 +25,11 @@ public class Player : MonoBehaviour
     public int turns;
     public TextMeshProUGUI turnsDisplay;
 
+    //Puntuacion
+    [SerializeField] private int score;
+    [SerializeField] private int highscore;
+    public TextMeshProUGUI highscoreDisplay;
+ 
     void Start()
     {
         resetPlayer();
@@ -47,6 +52,7 @@ public class Player : MonoBehaviour
 
         coins = 0;
         turns = 0;
+        score = 0;
     }
 
     void Update()
@@ -55,6 +61,10 @@ public class Player : MonoBehaviour
         {
             coinsDisplay.text = coins.ToString();
             turnsDisplay.text = turns.ToString();
+
+            //Actualizamos puntuación:
+            if (score > highscore) highscore = score;
+            highscoreDisplay.text = highscore.ToString();
 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -116,11 +126,15 @@ public class Player : MonoBehaviour
                 bMoving = true;
                 AudioSource.PlayClipAtPoint(jumpSound, transform.position);
             }
+            
+            //Perder.
+			if (transform.position.y <= -4.0f)
+			{
+				GameManager.Instance.ChangeState(GameState.Lose);
+			}
+
         }
     }
-
-
-        
 
     //Collision
     [SerializeField] private GameObject TurnedBlock;
@@ -132,6 +146,7 @@ public class Player : MonoBehaviour
             Destroy(objeto.gameObject);
 
             ++coins;
+            score += 2;
         }
         else
         {
@@ -141,6 +156,7 @@ public class Player : MonoBehaviour
             {
                 //Si pisamos un TurnBlock, almacenamos y permitimos ir en dirección a la siguiente.
                 canRotate = true;
+                ++score;
 
                 nextDestination = objeto.gameObject.GetComponent<TurnBlock>().getNextDestination();
             }

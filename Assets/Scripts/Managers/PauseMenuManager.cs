@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PauseMenuManager : MonoBehaviour
 {
-	public GameObject pauseMenuCanvas;
+	[SerializeField] private GameObject pauseMenuCanvas;
 
    	private void Awake()
 	{

@@ -12,10 +12,11 @@ public class MenuManager : MonoBehaviour
 		mainMenu,
 		creditsPage,
 		instructionsPage,
-		confirmationDialog
+		confirmationDialog,
+		highscorePage
 	}
 
-	public List<GameObject> states;
+	[SerializeField] private List<GameObject> states;
 
 	public GameObject currentState = null;
 
@@ -72,6 +73,9 @@ public class MenuManager : MonoBehaviour
 			case menuState.confirmationDialog:
 				currentState = states[3];
 				break;
+			case menuState.highscorePage:
+				currentState = states[4];
+				break;
 		}
 		currentState.SetActive(true);
 	}
@@ -92,14 +96,20 @@ public class MenuManager : MonoBehaviour
 		SetState(menuState.mainMenu);
 	}
 
-	public void changeToLeaderboard()
-	{
-
-	}
-
 	public void exitDialog()
 	{
 		SetState(menuState.confirmationDialog);
+	}
+
+	public void changeToHighscore()
+	{
+		SetState(menuState.highscorePage);
+	}
+
+
+	public void lostWindowBackMenu()
+	{
+		GameManager.Instance.ChangeState(GameState.Menu);
 	}
 
 	public void exitGame()

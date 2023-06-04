@@ -18,6 +18,11 @@ TagManager:
   - creditos
   - pellet
   - hud
+  - TurnedBlock
+  - Block
+  - Coin
+  - TurnBlock
+  - fog
   layers:
   - Default
   - TransparentFX

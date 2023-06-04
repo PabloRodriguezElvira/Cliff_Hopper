@@ -13,6 +13,7 @@ public class Level : MonoBehaviour
     // [SerializeField] private Trap TrapPrefab;
     [SerializeField] private List<GameObject> Traps;
     [SerializeField] private GameObject CoinPrefab;
+	[SerializeField] private GameObject FogPrefab;
 
 	float sizeBlock, trampaProb, coinProb;
 	float offsetYCoin;
@@ -21,6 +22,21 @@ public class Level : MonoBehaviour
     {
         instance = this;
     }
+
+	
+	public void changeFogColor()
+	{
+		GameObject[] objetosFog = GameObject.FindGameObjectsWithTag("fog");
+		foreach (GameObject obj in objetosFog)
+		{
+			ParticleSystem ps = obj.GetComponentInChildren<ParticleSystem>();
+			if (ps != null)
+			{
+				var mainModule = ps.main;
+				mainModule.startColor = Color.red;
+			}
+		}
+	}
 
     public void crearNivel()
 	{
@@ -105,7 +121,7 @@ public class Level : MonoBehaviour
 				{
 					//Calculamos offset para que la pellet aparezca en el centro del bloque.
 					//Se randomiza el offset de Y
-					offsetYCoin = Random.value * (7 - 4.7f) + 4.7f;
+					offsetYCoin = Random.value * (15.0f - 4.7f) + 4.7f;
 					
 					if (dir == Vector3.forward) offset = new Vector3(-1.0f, offsetYCoin, 0.0f);
 					else offset = new Vector3(0.0f, offsetYCoin, -2.5f);
@@ -115,10 +131,17 @@ public class Level : MonoBehaviour
 				}
 			}
 			//newBlock.transform.parent = transform;
+			//Generar niebla:
+			if (i % 2 == 0)
+			{
+				Vector3 posFog = new Vector3(pos.x, -10.0f, pos.z);
+				GameObject fogObj = Instantiate(FogPrefab, posFog, Quaternion.identity);
+				fogObj.transform.parent = transform;
+			}
 		}
 
         pathLength1 = pathLength2;
-        return pos;
+		return pos;
 	}
 
 	

@@ -96,9 +96,11 @@ public class MovePlayer : MonoBehaviour
     {
         if (GameManager.Instance.State == GameState.Play)
         {
+			Debug.Log(transform.position.y);
 			//Actualizar coins y giros:
 			coinsDisplay.text = coins.ToString();
 			girosDisplay.text = giros.ToString();
+
 			
 			//Moverse palante.
 			if (!bMoving)
@@ -116,7 +118,6 @@ public class MovePlayer : MonoBehaviour
 				actualPos = transform.position;
 				angle = 0;
 
-		Debug.Log(Placas);
 				//Cambiamos dirección.
 				//moveDirection = (Placas[index_placa] - actualPos).normalized;
 				moveDirection = Vector3.right;
@@ -154,6 +155,11 @@ public class MovePlayer : MonoBehaviour
 				bMoving = false;
 				//Cambiar estado a menu de pausa.
 				GameManager.Instance.ChangeState(GameState.PauseMenu);
+			}
+			//Perder.
+			if (transform.position.y <= -4.0f)
+			{
+				GameManager.Instance.ChangeState(GameState.Lose);
 			}
 
         }

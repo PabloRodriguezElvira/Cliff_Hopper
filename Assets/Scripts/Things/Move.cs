@@ -5,7 +5,7 @@ using UnityEngine;
 public class Move : MonoBehaviour
 {
     public Vector3 speed;
-	public Transform player;
+	public GameObject player;
 	public float suavidad;
 	public Vector3 offset;
 
@@ -13,7 +13,7 @@ public class Move : MonoBehaviour
     void Update()
     {
 		// Calcular la posición objetivo de la cámara sumando el offset al jugador
-		Vector3 posicionObjetivo = player.position + offset;
+		Vector3 posicionObjetivo = player.transform.position + offset;
 
 		// Utilizar SmoothDamp para suavizar la transición entre la posición actual y la posición objetivo
 		Vector3 posicionSuavizada = Vector3.SmoothDamp(transform.position, posicionObjetivo, ref speed, suavidad);

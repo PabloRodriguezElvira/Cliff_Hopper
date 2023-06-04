@@ -9,10 +9,19 @@ public class GameManager : StaticInstance<GameManager> {
     public static event Action<GameState> OnGameStateChanged;
     
     //HUD:
-    public GameObject hud;
+    [SerializeField] private GameObject hud;
 
     //Player:
-    public GameObject player;
+    [SerializeField] private GameObject player;
+
+    //Lose window:
+    [SerializeField] private GameObject loseDialog;
+
+    //Camera:
+    [SerializeField] private GameObject camera;
+
+    //Highscore:
+    [SerializeField] private int highscore;
 
     public GameState State { get; private set; }
 
@@ -33,6 +42,9 @@ public class GameManager : StaticInstance<GameManager> {
             case GameState.Play:
                 HandlePlay();
                 break;
+            case GameState.Lose:
+                HandleLose();
+                break;
             //case GameState.SpawningEnemies:
             //    HandleSpawningEnemies();
             //    break;
@@ -42,8 +54,6 @@ public class GameManager : StaticInstance<GameManager> {
             //case GameState.EnemyTurn:
             //    break;
             //case GameState.Win:
-            //    break;
-            //case GameState.Lose:
             //    break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
@@ -56,8 +66,9 @@ public class GameManager : StaticInstance<GameManager> {
         //Desactivar Menu;
         MenuManager.instance.currentState.SetActive(false);
 
-        //Activar HUD:
+        //Activar HUD y desactivar lose window:
         hud.SetActive(true);
+        loseDialog.SetActive(false);
     }
 
 	private void HandleMenu()
@@ -68,15 +79,27 @@ public class GameManager : StaticInstance<GameManager> {
         //Reset Player
         player.GetComponent<Player>().resetPlayer();
 
+        //Desactivar HUD y lose window:
+        hud.SetActive(false);
+        loseDialog.SetActive(false);
+    }
+    
+    private void HandleLose()
+    {
+        //Fog roja:
+        Level.instance.changeFogColor();
         //Desactivar HUD:
         hud.SetActive(false);
+        //Show lose:
+        loseDialog.SetActive(true);
+        //Stop camera:
+        //camera.GetComponent<Move>().speed = Vector3.zero;
     }
 
     private void HandlePauseMenu()
     {
-        
     }
-
+ 
 }
 
 /// <summary>
@@ -88,5 +111,7 @@ public enum GameState {
     Starting = 0,
     Menu = 1,
     PauseMenu = 2,
-    Play = 3 
+    Play = 3,
+    Win = 4,
+    Lose = 5
 }
