@@ -112,6 +112,7 @@ public class Player : MonoBehaviour
                         transform.rotation = Quaternion.LookRotation(currentDestination);
 
                         ++turns;
+                        ++score;
 
                         AudioSource.PlayClipAtPoint(jumpSound, transform.position);
                     }
